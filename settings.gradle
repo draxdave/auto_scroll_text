@@ -1,0 +1,3 @@
+include ':AutoScrollText'
+include ':app'
+rootProject.name = "Autoscroll Textview"
