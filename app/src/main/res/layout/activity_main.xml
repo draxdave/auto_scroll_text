@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,15 +19,34 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <HorizontalScrollView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <TextView
+                android:singleLine="true"
+                android:lines="1"
+                android:text="A few Text behind me A few Text behind me A few Text behind me A few Text behind me A few Text behind me "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+    </HorizontalScrollView>
     <ir.drax.autoscrolltext.AutoScrollTextView
         android:layout_margin="4dp"
-        android:background="#eee"
+        android:background="#aaa"
+        android:id="@+id/autoText"
         android:padding="7dp"
-        app:text="متن5 تمتن تستی م4تن تستی متن تستی متن تستی مت3ن تستی متن تستی متن تستی متن تست22ی "
-        android:layoutDirection="rtl"
+        app:text="متن5 تمتن تستی م4تن تستی متن تستی متن تستی مت3ن تستی متن تستی متن تستی متن تست22یمتن5 تمتن تستی م4تن تستی متن تستی متن تستی مت3ن تستی متن تستی متن تستی متن تست22ی "
+        app:scrollDirection="rtl"
         app:textColor="#ff0000"
         app:textSize="13sp"
-        app:animationSpeed="6"
+        app:animationSpeed="2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -35,4 +54,4 @@
         android:layout_height="wrap_content"/>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>

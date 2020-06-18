@@ -22,6 +22,8 @@ class AutoScrollTextView(context: Context?, attrs: AttributeSet?): HorizontalScr
     private var text = ""
     private var textView:TextView
     private var scrollSpeed = 5;
+    private var scrollDirection = 0     //ltr=0  rtl=1
+    private  var activeAnimator= AnimatorSet()
 
     init {
         isHorizontalScrollBarEnabled=false;
@@ -57,14 +59,18 @@ class AutoScrollTextView(context: Context?, attrs: AttributeSet?): HorizontalScr
                 val textColor = getColor(R.styleable.AutoScrollTextView_textColor,0)
                 textView.setTextColor(if (textColor==0) Color.BLACK else textColor)
 
+                scrollDirection = getInteger(R.styleable.AutoScrollTextView_scrollDirection,0)
+
                 textView.text=text
 
             } finally {
                 recycle()
             }
+            reDraw()
         }
+    }
 
-
+    private fun reDraw() {
         textView.viewTreeObserver.addOnGlobalLayoutListener(object : OnGlobalLayoutListener {
             override fun onGlobalLayout() {
                 val width: Int = textView.width
@@ -76,11 +82,12 @@ class AutoScrollTextView(context: Context?, attrs: AttributeSet?): HorizontalScr
                         textView.viewTreeObserver.removeGlobalOnLayoutListener(this)
                     }
 
-                    myScrollTo(if(layoutDirection==View.LAYOUT_DIRECTION_RTL)-width else width,0, text.length,false)
+                    myScrollTo(if(scrollDirection==0)width else -width,0, text.length,true)
 
                 }
             }
         })
+
     }
 
     private fun myScrollTo(x:Int, y:Int, contentLength:Int,reset:Boolean) {
@@ -90,12 +97,12 @@ class AutoScrollTextView(context: Context?, attrs: AttributeSet?): HorizontalScr
         val endY = 0
         val xTranslate = ObjectAnimator.ofInt(this, "scrollX", endX)
         val yTranslate = ObjectAnimator.ofInt(this, "scrollY", endY)
-        val animators = AnimatorSet()
-        animators.duration = if (reset) 1000L else ( 600 * contentLength / scrollSpeed).toLong()
-        animators.play(xTranslate)
-        animators.startDelay=1000
-        animators.interpolator=LinearInterpolator()
-        animators.addListener(object : AnimatorListener {
+        activeAnimator = AnimatorSet()
+        activeAnimator.duration = if (reset) 1000L else ( 600 * contentLength / scrollSpeed).toLong()
+        activeAnimator.play(xTranslate)
+        activeAnimator.startDelay=1000
+        activeAnimator.interpolator=LinearInterpolator()
+        activeAnimator.addListener(object : AnimatorListener {
             override fun onAnimationStart(arg0: Animator) {
                 // TODO Auto-generated method stub
             }
@@ -118,7 +125,16 @@ class AutoScrollTextView(context: Context?, attrs: AttributeSet?): HorizontalScr
                 // TODO Auto-generated method stub
             }
         })
-        animators.start()
+        activeAnimator.start()
+    }
+
+    fun setText(newText:String){
+        activeAnimator.cancel()
+        text=""
+        repeat(10) {
+            text+=newText}
+        textView.text=text
+        reDraw()
     }
 
 }
